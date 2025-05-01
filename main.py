@@ -380,29 +380,18 @@ async def restart_handler(_, m):
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
 @bot.on_message(filters.command("drm")) # & filters.private)
 async def account_login(bot: Client, m: Message):
-    user_id = str(m.chat.id)
-    #user = str(m.chat.id)
-    subscription_data = read_subscription_data()
-    channels = read_channels_data()#added
     #if m.chat.type == "private":
-        #user_id = str(m.from_user.id)
-        #subscription_data = read_subscription_data()
-    if user_id not in channels and not any(user[0] == user_id for user in subscription_data):
-            await m.reply_text("❌ **You are not a premium user.**\nPlease upgrade your subscription! 💎")
-            return
-    #channels = read_channels_data()#added
-    #elif str(m.chat.id) not in channels::
-        #channels = read_channels_data()
-        #if str(m.chat.id) not in channels:
-            #await m.reply_text("❗ **You are not a premium user.**\nSubscribe now for exclusive access! 🚀")
-            #return          
+    user_id = str(m.from_user.id)
+    subscription_data = read_subscription_data()
+    if not any(user[0] == user_id for user in subscription_data):
+        await m.reply_text("❌ You are not a premium user. Please upgrade your subscription! 💎")
+        return          
     editable = await m.reply_text("**Please Send TXT file for download**")
     input: Message = await bot.listen(editable.chat.id)
     y = await input.download()
-    await input.delete(True)
     file_name, ext = os.path.splitext(os.path.basename(y))  # Extract filename & extension
 
-    if file_name.startswith("Naruto://"):  # ✅ Check if filename ends with "_helper"
+    if file_name.endswith("_helper"):  # ✅ Check if filename ends with "_helper"
         x = decrypt_file_txt(y)  # Decrypt the file
         await input.delete(True)
     else:
