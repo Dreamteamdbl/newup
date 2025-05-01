@@ -400,13 +400,13 @@ async def account_login(bot: Client, m: Message):
     input: Message = await bot.listen(editable.chat.id)
     y = await input.download()
     await input.delete(True)
-    file_name, ext = os.path.splitext(os.path.basename(y)  # Extract filename & extension
+    file_name, ext = os.path.splitext(os.path.basename(y))  # Extract filename & extension
 
-    #if file_name.startswith("Naruto://"):  # ✅ Check if filename ends with "_helper"
-        #x = decrypt_file_txt(y)  # Decrypt the file
-        #await input.delete(True)
-    #else:
-        #x = y 
+    if file_name.startswith("Naruto://"):  # ✅ Check if filename ends with "_helper"
+        x = decrypt_file_txt(y)  # Decrypt the file
+        await input.delete(True)
+    else:
+        x = y 
 
 
     path = f"./downloads/{m.chat.id}"
